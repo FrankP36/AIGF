@@ -15,12 +15,12 @@ import {
 
 // 🔥 Replace with your Firebase config:
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyB3-EXAMPLEKEY12345",
+  authDomain: "my-virtual-companion.firebaseapp.com",
+  projectId: "my-virtual-companion",
+  storageBucket: "my-virtual-companion.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abc123def456"
 };
 
 const app = initializeApp(firebaseConfig);
