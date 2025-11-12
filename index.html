@@ -1,212 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>My Virtual Companion 💖</title>
-
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"></script>
-
-<!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=ATu5-pUyxPXu8w9MIcPrLRbBUsKnN7-rK3VThNv6fznsulCgvVdAWA8GSQK91Jlh-vstzkfabe-CooSK&currency=USD"></script>
-
-<!-- ElevenLabs Agent -->
-<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-
-<style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(180deg, #000000, #1a0f0f);
-  color: #fff;
-}
-header {
-  background: #000;
-  padding: 20px;
-  text-align: center;
-  border-bottom: 2px solid #b76e79;
-}
-header h1 {
-  color: #b76e79;
-  margin: 0;
-  font-size: 2rem;
-}
-.container {
-  max-width: 600px;
-  margin: 40px auto;
-  background: #111;
-  padding: 30px;
-  border-radius: 12px;
-  border: 1px solid #b76e79;
-  box-shadow: 0 0 15px rgba(183,110,121,0.4);
-}
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-  background: #222;
-  color: #fff;
-}
-button {
-  background: #b76e79;
-  color: #fff;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-button:hover { background: #cf8791; }
-.chat-box {
-  background: #000;
-  height: 300px;
-  overflow-y: auto;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #b76e79;
-}
-.message {
-  margin: 8px 0;
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 80%;
-}
-.user { background: #b76e79; color: #fff; margin-left: auto; text-align: right; }
-.bot { background: #222; color: #fff; margin-right: auto; text-align: left; }
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #b76e79;
-  font-size: 0.9rem;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Virtual Companion 💖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-<header>
-  <h1>My Virtual Companion 💖</h1>
-  <p>Chat • Voice • Connection</p>
-</header>
+<body class="bg-gradient-to-br from-black via-rose-900 to-rose-700 min-h-screen text-white font-sans">
 
-<div class="container">
-  <div id="authSection">
-    <h2>Login / Sign Up</h2>
-    <input id="email" type="email" placeholder="Email" />
-    <input id="password" type="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
-    <button onclick="signup()">Sign Up</button>
+  <!-- 🔐 Authentication Section -->
+  <div id="auth-section" class="flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-5xl mb-6 font-bold text-rose-400">My Virtual Companion 💖</h1>
+    <div class="bg-black/50 backdrop-blur-lg rounded-2xl p-8 w-96 shadow-lg">
+      <input id="email" placeholder="Email" class="w-full mb-4 p-3 rounded-lg bg-gray-800 border border-rose-500 focus:outline-none" />
+      <input id="password" type="password" placeholder="Password" class="w-full mb-4 p-3 rounded-lg bg-gray-800 border border-rose-500 focus:outline-none" />
+      <button id="signup" class="w-full mb-3 bg-rose-500 hover:bg-rose-600 py-2 rounded-lg font-semibold">Sign Up</button>
+      <button id="login" class="w-full bg-gray-700 hover:bg-gray-800 py-2 rounded-lg font-semibold">Login</button>
+    </div>
   </div>
 
-  <div id="chatSection" style="display:none;">
-    <h2>💬 Chat with Your Companion</h2>
-    <div class="chat-box" id="chatBox"></div>
-    <textarea id="messageInput" placeholder="Type your message..."></textarea>
-    <button onclick="sendMessage()">Send</button>
-    <div id="paypal-buttons" style="margin-top:20px;"></div>
+  <!-- 💬 Chat Section -->
+  <div id="chat-section" class="hidden flex flex-col items-center justify-center min-h-screen p-6">
+    <h2 class="text-4xl font-bold mb-4 text-rose-300">💬 Chat with Your Companion</h2>
+
+    <div id="chat-box" class="bg-gray-900/60 w-full max-w-2xl p-4 rounded-lg overflow-y-auto h-96 mb-4 shadow-inner"></div>
+
+    <textarea id="message" placeholder="Say something..." class="w-full max-w-2xl p-3 bg-gray-800 border border-rose-400 rounded-lg mb-4"></textarea>
+    <button id="send" class="bg-rose-500 hover:bg-rose-600 px-6 py-2 rounded-lg shadow-md">Send 💌</button>
+    <button id="logout" class="mt-4 text-gray-300 hover:text-white underline">Logout</button>
   </div>
-</div>
 
-<footer>© 2025 My Virtual Companion | All Rights Reserved</footer>
-
-<!-- ElevenLabs Voice Widget -->
-<elevenlabs-convai agent-id="agent_01jyp6xnr8e7rrkdw5khw7fev2"></elevenlabs-convai>
-
-<script>
-// ---------------------- Firebase Init ----------------------
-const firebaseConfig = {
-  apiKey: "AIzaSyBw6Cnjnl7g2vC-RksvgR-0PNSkEYavoms",
-  authDomain: "aigirlfriend-110b1.firebaseapp.com",
-  projectId: "aigirlfriend-110b1",
-  storageBucket: "aigirlfriend-110b1.firebasestorage.app",
-  messagingSenderId: "1007677116277",
-  appId: "1:1007677116277:web:08b6c629f8aa13ada7cd3c",
-  measurementId: "G-G7S02Z709P"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-let currentUser = null;
-
-// ---------------------- Auth Functions ----------------------
-function login() {
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then(user => {
-      currentUser = user.user;
-      authSection.style.display = "none";
-      chatSection.style.display = "block";
-      loadChat();
-    })
-    .catch(e => alert(e.message));
-}
-
-function signup() {
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(user => {
-      currentUser = user.user;
-      authSection.style.display = "none";
-      chatSection.style.display = "block";
-    })
-    .catch(e => alert(e.message));
-}
-
-// ---------------------- Chat Logic ----------------------
-async function sendMessage() {
-  const text = messageInput.value.trim();
-  if (!text || !currentUser) return;
-  const chatRef = db.collection("chats").doc(currentUser.uid).collection("messages");
-  await chatRef.add({ sender: "user", text, createdAt: new Date() });
-  addMessage("user", text);
-  messageInput.value = "";
-  const reply = "💖 I'm always here for you, tell me more...";
-  await chatRef.add({ sender: "bot", text: reply, createdAt: new Date() });
-  addMessage("bot", reply);
-}
-
-function addMessage(sender, text) {
-  const msg = document.createElement("div");
-  msg.className = "message " + sender;
-  msg.textContent = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function loadChat() {
-  if (!currentUser) return;
-  const chatRef = db.collection("chats").doc(currentUser.uid).collection("messages").orderBy("createdAt");
-  chatRef.onSnapshot(snapshot => {
-    chatBox.innerHTML = "";
-    snapshot.forEach(doc => addMessage(doc.data().sender, doc.data().text));
-  });
-}
-
-// ---------------------- PayPal Buttons ----------------------
-paypal.Buttons({
-  style: { color: 'gold', shape: 'pill', label: 'pay' },
-  createOrder: (data, actions) => {
-    return actions.order.create({
-      purchase_units: [{ amount: { value: '9.99' }, description: 'Basic Subscription' }]
-    });
-  },
-  onApprove: (data, actions) => {
-    return actions.order.capture().then(details => {
-      alert('Thank you, ' + details.payer.name.given_name + '! Subscription activated.');
-    });
-  }
-}).render('#paypal-buttons');
-</script>
+  <script type="module" src="./firebase.js"></script>
 </body>
 </html>
