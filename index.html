@@ -3,148 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My Virtual Companion</title>
-
-  <!-- Tailwind for quick styling -->
+  <title>Login | My Virtual Companion</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- PayPal SDK (client-side) -->
-  <script src="https://www.paypal.com/sdk/js?client-id=ATu5-pUyxPXu8w9MIcPrLRbBUsKnN7-rK3VThNv6fznsulCgvVdAWA8GSQK91Jlh-vstzkfabe-CooSK&currency=USD" defer></script>
-
-  <!-- ElevenLabs ConvAI widget -->
-  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-
   <style>
-    :root{
-      --bg:#070707; --card:#0f0f10; --rose:#e09ba8; --rose2:#b76e79; --muted:#9a9a9a;
-    }
-    body { background:linear-gradient(180deg,#000,#0b0b0b); color:#f3eef0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; }
-    .glass { background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); padding:16px; border-radius:12px; }
-    .btn-rose { background: linear-gradient(90deg,var(--rose),var(--rose2)); color:#000; font-weight:600; padding:.6rem 1rem; border-radius:999px; }
-    .small { color:var(--muted); font-size:.92rem; }
-    .hidden { display:none; }
-    .chat-bubble { padding:10px; border-radius:10px; margin:6px 0; max-width:78%; }
-    .from-me { background:linear-gradient(90deg,var(--rose),var(--rose2)); color:#000; margin-left:auto; text-align:right; }
-    .from-ai { background:#151515; color:#fff; margin-right:auto; text-align:left; }
+    body { background: linear-gradient(180deg, #000, #0b0b0b); color: #fff; font-family: Inter, sans-serif; }
+    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 2rem; max-width: 400px; margin: 5vh auto; }
+    .btn-rose { background: linear-gradient(90deg, #e09ba8, #b76e79); color: #000; font-weight: 600; padding: .6rem 1rem; border-radius: 999px; }
+    .small { color: #aaa; font-size: .9rem; }
   </style>
 </head>
 <body>
 
-  <div class="max-w-4xl mx-auto p-6">
-    <header class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,var(--rose),var(--rose2));">MC</div>
-        <div>
-          <h1 class="text-xl font-bold">My Virtual Companion</h1>
-          <div class="small">Black • Rose-gold • Private</div>
-        </div>
-      </div>
+  <div class="card text-center">
+    <h1 class="text-2xl font-bold mb-4 text-[#e09ba8]">💖 My Virtual Companion</h1>
 
-      <nav class="flex items-center gap-3">
-        <button id="nav-home" class="small">Home</button>
-        <button id="nav-chat" class="small">Chat</button>
-        <button id="nav-sub" class="small">Subscribe</button>
-        <span id="auth-area" class="ml-4 small"></span>
-      </nav>
-    </header>
+    <input id="email" type="email" placeholder="Email" class="w-full p-3 mb-3 rounded bg-transparent border border-white/10" />
+    <input id="password" type="password" placeholder="Password" class="w-full p-3 mb-3 rounded bg-transparent border border-white/10" />
 
-    <!-- HOME -->
-    <section id="view-home" class="glass mb-6">
-      <div class="flex flex-col md:flex-row gap-6 items-center">
-        <div class="flex-1">
-          <h2 class="text-2xl font-bold" style="color:var(--rose)">Welcome — My Virtual Companion</h2>
-          <p class="small mt-2 mb-4">Create her personality, choose her voice, and chat privately. Sign up to start.</p>
-          <div class="flex gap-3">
-            <button id="home-chat" class="btn-rose">Chat</button>
-            <button id="home-sub" class="border border-white/10 px-4 py-2 rounded">Subscribe</button>
-          </div>
-        </div>
-        <div class="w-full md:w-96">
-          <div class="glass">
-            <label class="small">Her name</label>
-            <input id="input-name" class="w-full p-2 mt-2 mb-3 bg-transparent border border-white/6 rounded" placeholder="Aria" />
-            <label class="small">Personality</label>
-            <input id="input-personality" class="w-full p-2 mt-2 mb-3 bg-transparent border border-white/6 rounded" placeholder="Sweet, playful, supportive" />
-            <div class="flex gap-2">
-              <button id="save-profile" class="border border-white/10 px-3 py-2 rounded small">Save Profile</button>
-              <button id="open-chat" class="btn-rose px-3 py-2">Open Chat</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div class="flex justify-center gap-2 mb-3">
+      <button id="btn-login" class="btn-rose">Login</button>
+      <button id="btn-signup" class="border border-white/20 px-4 py-2 rounded">Sign Up</button>
+    </div>
 
-    <!-- AUTH (embedded on same page) -->
-    <section id="view-auth" class="glass mb-6">
-      <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <h3 class="font-semibold mb-2">Sign up / Login</h3>
-          <input id="email" placeholder="Email" class="w-full p-3 rounded bg-transparent border border-white/6 mb-3" />
-          <input id="password" placeholder="Password" type="password" class="w-full p-3 rounded bg-transparent border border-white/6 mb-3" />
-          <div class="flex gap-2">
-            <button id="btn-register" class="btn-rose">Sign Up</button>
-            <button id="btn-login" class="border border-white/10 px-4 py-2 rounded">Login</button>
-          </div>
-        </div>
-        <div>
-          <h3 class="font-semibold mb-2">Or sign in with Google</h3>
-          <button id="btn-google" class="w-full py-2 rounded bg-blue-600">Sign in with Google</button>
-          <div class="small mt-4">Admin email: <strong>franklinemutai42@gmail.com</strong></div>
-        </div>
-      </div>
-    </section>
+    <button id="btn-google" class="w-full py-2 rounded bg-blue-600 mb-3">Sign in with Google</button>
 
-    <!-- CHAT SECTION (hidden until logged in) -->
-    <section id="view-chat" class="glass hidden mb-6">
-      <div class="flex gap-6">
-        <div class="flex-1">
-          <div class="flex items-center justify-between mb-3">
-            <div>
-              <h3 class="text-lg font-semibold" style="color:var(--rose)">Chat</h3>
-              <div class="small">Private conversation with your companion</div>
-            </div>
-            <div class="small" id="profile-display">Not set</div>
-          </div>
-
-          <div id="chat-box" class="p-4 rounded border border-white/6 overflow-y-auto h-80 mb-3 bg-black/20"></div>
-
-          <textarea id="message" class="w-full p-3 rounded bg-transparent border border-white/6" placeholder="Say something..."></textarea>
-          <div class="flex gap-2 mt-3">
-            <button id="btn-send" class="btn-rose">Send</button>
-            <button id="btn-logout" class="border border-white/10 px-4 py-2 rounded">Logout</button>
-          </div>
-        </div>
-
-        <aside class="w-80">
-          <div class="glass p-4 mb-3">
-            <div class="small">Subscription</div>
-            <div id="sub-status" class="font-semibold">Not subscribed</div>
-            <div id="paypal-area" class="mt-3"></div>
-          </div>
-
-          <div class="glass p-4">
-            <div class="small">Voice Companion</div>
-            <div id="eleven-area" class="mt-3 small text-muted">Appears here when subscribed</div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <footer class="small mt-4">© My Virtual Companion</footer>
+    <p class="small">By continuing, you agree to our <a href="#" class="underline">Terms</a>.</p>
   </div>
 
-  <!-- Firebase (modular) from CDN -->
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
-    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
 
-    // ---------- INSERT YOUR FIREBASE CONFIG HERE ----------
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyBw6Cnjnl7g2vC-RksvgR-0PNSkEYavoms",
       authDomain: "aigirlfriend-110b1.firebaseapp.com",
       projectId: "aigirlfriend-110b1",
-      storageBucket: "aigirlfriend-110b1.appspot.com", // <-- use .appspot.com
+      storageBucket: "aigirlfriend-110b1.appspot.com",
       messagingSenderId: "1007677116277",
       appId: "1:1007677116277:web:08b6c629f8aa13ada7cd3c",
       measurementId: "G-G7S02Z709P"
@@ -152,219 +47,45 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // UI refs
-    const viewHome = document.getElementById('view-home');
-    const viewAuth = document.getElementById('view-auth');
-    const viewChat = document.getElementById('view-chat');
-
-    const btnRegister = document.getElementById('btn-register');
-    const btnLogin = document.getElementById('btn-login');
-    const btnGoogle = document.getElementById('btn-google');
-    const btnLogout = document.getElementById('btn-logout');
-    const btnSend = document.getElementById('btn-send');
-    const btnOpenChat = document.getElementById('open-chat');
-    const saveProfile = document.getElementById('save-profile');
 
     const emailEl = document.getElementById('email');
     const passwordEl = document.getElementById('password');
-    const messageEl = document.getElementById('message');
-    const chatBox = document.getElementById('chat-box');
-    const profileDisplay = document.getElementById('profile-display');
-    const subStatus = document.getElementById('sub-status');
-    const paypalArea = document.getElementById('paypal-area');
-    const elevenArea = document.getElementById('eleven-area');
 
-    // Nav bindings
-    document.getElementById('nav-home').onclick = () => { viewHome.scrollIntoView(); };
-    document.getElementById('nav-chat').onclick = () => showChat();
-    document.getElementById('nav-sub').onclick = () => { viewChat.scrollIntoView(); };
-
-    document.getElementById('home-chat').onclick = () => showChat();
-    document.getElementById('home-sub').onclick = () => { viewChat.scrollIntoView(); };
-    document.getElementById('open-chat').onclick = () => showChat();
-
-    // Save profile
-    document.getElementById('save-profile').onclick = async () => {
-      const user = auth.currentUser;
-      if (!user) return alert('Please login to save profile');
-      const name = document.getElementById('input-name').value || 'Aria';
-      const personality = document.getElementById('input-personality').value || 'Sweet and supportive';
-      await setDoc(doc(db, 'users', user.uid), { profile: { name, personality }, updatedAt: new Date() }, { merge: true });
-      profileDisplay.textContent = `${name} — ${personality}`;
-      alert('Profile saved');
-    };
-
-    // ---------------- AUTH ACTIONS ----------------
-    btnRegister.addEventListener('click', async () => {
-      const email = emailEl.value.trim();
-      const pw = passwordEl.value;
-      if (!email || !pw) return alert('Enter email and password');
+    // Login
+    document.getElementById('btn-login').addEventListener('click', async () => {
       try {
-        await createUserWithEmailAndPassword(auth, email, pw);
-        alert('Account created — logged in');
+        await signInWithEmailAndPassword(auth, emailEl.value, passwordEl.value);
+        window.location.href = "chat.html";
       } catch (e) {
-        alert('Signup error: ' + e.message);
-        console.error(e);
+        alert("Login failed: " + e.message);
       }
     });
 
-    btnLogin.addEventListener('click', async () => {
-      const email = emailEl.value.trim();
-      const pw = passwordEl.value;
-      if (!email || !pw) return alert('Enter email and password');
+    // Signup
+    document.getElementById('btn-signup').addEventListener('click', async () => {
       try {
-        await signInWithEmailAndPassword(auth, email, pw);
-        alert('Login successful');
+        await createUserWithEmailAndPassword(auth, emailEl.value, passwordEl.value);
+        window.location.href = "chat.html";
       } catch (e) {
-        alert('Login error: ' + e.message);
-        console.error(e);
+        alert("Signup failed: " + e.message);
       }
     });
 
-    btnGoogle.addEventListener('click', async () => {
-      const provider = new GoogleAuthProvider();
+    // Google login
+    document.getElementById('btn-google').addEventListener('click', async () => {
       try {
+        const provider = new GoogleAuthProvider();
         await signInWithPopup(auth, provider);
+        window.location.href = "chat.html";
       } catch (e) {
-        alert('Google sign-in failed: ' + e.message);
-        console.error(e);
+        alert("Google Sign-In error: " + e.message);
       }
     });
 
-    btnLogout.addEventListener('click', async () => {
-      await signOut(auth);
-      location.reload();
+    // Already logged in? Redirect to chat
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = "chat.html";
     });
-
-    // ---------------- AUTH STATE ----------------
-    let currentUnsubscribe = null;
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // Hide auth view, show chat view
-        viewAuth.style.display = 'none';
-        viewChat.style.display = 'block';
-        viewHome.style.display = 'block';
-
-        // ensure user doc
-        const ref = doc(db, 'users', user.uid);
-        const snap = await getDoc(ref);
-        if (!snap.exists()) await setDoc(ref, { email: user.email, createdAt: new Date() }, { merge: true });
-
-        // update profile display
-        const data = (await getDoc(ref)).data();
-        if (data?.profile) profileDisplay.textContent = `${data.profile.name} — ${data.profile.personality}`;
-
-        // load subscription status
-        const sub = data?.subscription;
-        subStatus.textContent = sub?.status === 'active' ? `${sub.plan} (active)` : 'Not subscribed';
-
-        // render PayPal buttons in sidebar
-        renderPayPalButtons();
-
-        // set up chat listener (messages under users/{uid}/messages)
-        if (currentUnsubscribe) currentUnsubscribe();
-        const q = query(collection(db, 'users', user.uid, 'messages'), orderBy('createdAt'));
-        currentUnsubscribe = onSnapshot(q, snapshot => {
-          chatBox.innerHTML = '';
-          snapshot.forEach(docSnap => {
-            const m = docSnap.data();
-            const el = document.createElement('div');
-            el.className = 'chat-bubble ' + (m.sender === 'user' ? 'from-me' : 'from-ai');
-            el.innerHTML = `<div class="small">${m.sender === 'user' ? 'You' : 'Companion'}</div><div>${m.text}</div>`;
-            chatBox.appendChild(el);
-          });
-          chatBox.scrollTop = chatBox.scrollHeight;
-        });
-
-        // show elevenlabs widget if subscribed
-        if (sub?.status === 'active') injectElevenWidget();
-
-      } else {
-        // show auth UI
-        viewAuth.style.display = 'block';
-        viewChat.style.display = 'none';
-        profileDisplay.textContent = 'Not set';
-        subStatus.textContent = 'Not subscribed';
-      }
-    });
-
-    // ---------------- SEND MESSAGE ----------------
-    document.getElementById('btn-send').addEventListener('click', async () => {
-      const user = auth.currentUser;
-      if (!user) return alert('Please login to send messages');
-      const text = messageEl.value.trim();
-      if (!text) return;
-      const ref = await addDoc(collection(db, 'users', user.uid, 'messages'), { sender: 'user', text, createdAt: new Date() });
-
-      // Mock AI reply (replace with server-side GPT or widget later)
-      const reply = "💖 I'm here for you. Tell me more.";
-      await addDoc(collection(db, 'users', user.uid, 'messages'), { sender: 'ai', text: reply, createdAt: new Date() });
-
-      messageEl.value = '';
-    });
-
-    // ---------------- PAYPAL Buttons ----------------
-    function renderPayPalButtons() {
-      paypalArea.innerHTML = '';
-      if (!window.paypal) {
-        paypalArea.innerHTML = '<div class="small">PayPal loading...</div>';
-        setTimeout(renderPayPalButtons, 500);
-        return;
-      }
-
-      // Basic
-      window.paypal.Buttons({
-        style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
-        createOrder: (data, actions) => actions.order.create({
-          purchase_units: [{ amount: { value: '9.99' }, description: 'Basic plan - $9.99' }]
-        }),
-        onApprove: async (data, actions) => {
-          const order = await actions.order.capture();
-          const user = auth.currentUser;
-          if (!user) { alert('Login required'); return; }
-          await setDoc(doc(db, 'users', user.uid), { subscription: { status: 'active', plan: 'basic', orderId: order.id, updatedAt: new Date() } }, { merge: true });
-          alert('Subscription active — you can now use the voice companion.');
-          subStatus.textContent = 'basic (active)';
-          injectElevenWidget();
-        },
-        onError: (err) => { console.error(err); alert('PayPal error: ' + err?.message || err); }
-      }).render(paypalArea);
-
-    }
-
-    // ---------------- ElevenLabs ConvAI injection ----------------
-    function injectElevenWidget() {
-      // ensure it's not injected twice
-      if (document.querySelector('elevenlabs-convai')) return;
-      const container = document.getElementById('eleven-area');
-      container.innerHTML = ''; // clear text
-      const el = document.createElement('div');
-      el.innerHTML = `<elevenlabs-convai agent-id="agent_01jyp6xnr8e7rrkdw5khw7fev2"></elevenlabs-convai>`;
-      container.appendChild(el);
-      // widget script is already included in the head and will initialize
-    }
-
-    // ---------------- helper show chat ----------------
-    function showChat() {
-      viewChat.scrollIntoView();
-      // if user logged in, will show; otherwise prompt auth
-      if (!auth.currentUser) {
-        alert('Please sign in first.');
-        viewAuth.scrollIntoView();
-      }
-    }
-
-    // ---------------- small convenience bindings ----------------
-    document.getElementById('btn-logout').onclick = async () => {
-      await signOut(auth);
-      location.reload();
-    };
-
-    document.getElementById('nav-home').onclick = () => { window.scrollTo(0,0); };
-
-    // End modular script
   </script>
 </body>
 </html>
