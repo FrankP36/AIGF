@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chat | My Virtual Companion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: linear-gradient(180deg, #000, #0b0b0b); color: #fff; font-family: Inter, sans-serif; }
+    .btn-rose { background: linear-gradient(90deg, #e09ba8, #b76e79); color: #000; font-weight: 600; padding: .6rem 1rem; border-radius: 999px; }
+    .chat-bubble { padding:10px; border-radius:10px; margin:6px 0; max-width:78%; }
+    .from-me { background:linear-gradient(90deg,#e09ba8,#b76e79); color:#000; margin-left:auto; text-align:right; }
+    .from-ai { background:#151515; color:#fff; margin-right:auto; text-align:left; }
+  </style>
+</head>
+<body>
+
+  <div class="max-w-3xl mx-auto p-6">
+    <header class="flex justify-between items-center mb-4">
+      <h1 class="text-xl font-bold text-[#e09ba8]">💬 My Virtual Companion</h1>
+      <button id="btn-logout" class="border border-white/20 px-4 py-2 rounded">Logout</button>
+    </header>
+
+    <div id="chat-box" class="border border-white/10 p-4 rounded h-96 overflow-y-auto mb-3"></div>
+
+    <textarea id="message" class="w-full p-3 rounded bg-transparent border border-white/10 mb-3" placeholder="Type something..."></textarea>
+    <button id="btn-send" class="btn-rose">Send</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBw6Cnjnl7g2vC-RksvgR-0PNSkEYavoms",
+      authDomain: "aigirlfriend-110b1.firebaseapp.com",
+      projectId: "aigirlfriend-110b1",
+      storageBucket: "aigirlfriend-110b1.appspot.com",
+      messagingSenderId: "1007677116277",
+      appId: "1:1007677116277:web:08b6c629f8aa13ada7cd3c",
+      measurementId: "G-G7S02Z709P"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const chatBox = document.getElementById('chat-box');
+    const msgEl = document.getElementById('message');
+
+    // Check auth
+    onAuthStateChanged(auth, (user) => {
+      if (!user) window.location.href = "index.html";
+      else loadChat(user.uid);
+    });
+
+    async function loadChat(uid) {
+      const q = query(collection(db, "users", uid, "messages"), orderBy("createdAt"));
+      onSnapshot(q, snapshot => {
+        chatBox.innerHTML = '';
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          const div = document.createElement('div');
+          div.className = 'chat-bubble ' + (d.sender === 'user' ? 'from-me' : 'from-ai');
+          div.textContent = d.text;
+          chatBox.appendChild(div);
+        });
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+    }
+
+    document.getElementById('btn-send').onclick = async () => {
+      const user = auth.currentUser;
+      const text = msgEl.value.trim();
+      if (!text) return;
+      await addDoc(collection(db, "users", user.uid, "messages"), { sender: "user", text, createdAt: new Date() });
+      await addDoc(collection(db, "users", user.uid, "messages"), { sender: "ai", text: "💖 I'm here for you.", createdAt: new Date() });
+      msgEl.value = '';
+    };
+
+    document.getElementById('btn-logout').onclick = async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    };
+  </script>
+</body>
+</html>
